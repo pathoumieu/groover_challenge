@@ -12,3 +12,6 @@ keras==2.2.5
 torch
 pandas-profiling
 tqdm
+plotly
+pydot
+graphviz
