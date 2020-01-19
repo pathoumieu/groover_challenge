@@ -8,6 +8,8 @@ This repo contains notebooks for building a recommender system for influencers a
 
 * `03_final_models.ipynb` builds Neural Networks models incorporating textual data from `track_info`
 
+NB: plotly plots do not show on github, please run notebooks to display them.
+
 
 ## How to use it
 
