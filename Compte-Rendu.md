@@ -1,10 +1,10 @@
 ## Introduction
 
-Nous construisons un système de recommandation **Content-Based**, qui va attribué une note à chaque couple influenceur/chanson. Ce système peut être utilisé pour recommander des influenceurs à un groupe ou inversement plusieurs chansons à un influenceur en fonction du score prédit (on recommande les items dans l'ordre décroissant des scores).
+Nous construisons un système de recommandation **Content-Based**, qui va attribuer une note à chaque couple influenceur/chanson. Ce système peut être utilisé pour recommander des influenceurs à un groupe ou inversement plusieurs chansons à un influenceur en fonction du score prédit (on recommande les items dans l'ordre décroissant des scores).
 
-Les articles joints et la litérature tendent à considérer que les sytèmes de recommandations basé sur le **Collaborative Filtering** sont plus performants que les systèmes de recommandation **Content-based**. Cependant, ces derniers ne permettent pas de traiter le problème du **Cold Start**. C'est pourquoi, une approche **Content-Based** est préférable dans un cas d'usage où des labels et artistes indpendants se renouvellent rapidement. Pour plus de performance, on peut également opter un modèle hybride.
+Les articles joints et la litérature tendent à considérer que les sytèmes de recommandations basé sur le **Collaborative Filtering** sont plus performants que les systèmes de recommandation **Content-based**. Cependant, ils ne permettent pas de traiter le problème du **Cold Start**. C'est pourquoi, une approche **Content-Based** est préférable dans un cas d'usage où des labels et artistes se renouvellent rapidement. Pour plus de performance, on peut également opter un modèle hybride.
 
-De plus, le dataset contient du feedback explicite, plus facile à traiter, mais de musique nouvelle pas nécessairement populaire.
+De plus, le dataset contient du feedback explicite, plus facile à traiter, mais contient de la musique nouvelle pas nécessairement populaire.
 
 
 ## Approche choisie
@@ -48,7 +48,7 @@ Le Learning Rate est réduit au fur et à mesure de l'entraînement avec ReduceL
 * LGBM: 0.3088
 * Dot model: 0.3162
 * 1st NN model: 0.3096
-* Final NN model (avec description des chansons):
+* Final NN model (avec description des chansons): 0.3079
 
 NB: le score est la 5-fold Cross Validation RMSE
 
@@ -134,7 +134,7 @@ On pourrait enrichir le modèle actuel avec des embeddings de chansons tirés de
 
 Voici comment seraient constitués ces embeddings :
 
-1. Entraînement d'un FCNN sur mel-spectrogram (possibilité d'utiliser les poids de [MUSICNN](https://github.com/jordipons/musicnn) comme warm start, `MSD_musicnn_big` par exemple) à prédire les facteurs latents des chansons du Million Song Dataset en minimisant la MSE (les mel-spectrogram seraient obtenus grâce à 7digital.com, les facteurs latents grâce à une WMF avec les données d'usage (play count) du MSD, et de Last.fm). Le FCNN sera de profondeur >= 5 et les convolutions 1D-vertical + 1D-horizontal, ou 3x3 selon la puissance de la machine d'entrainement, s'il est entraîné from scratch.
+1. Entraînement d'un FCNN sur mel-spectrogram (possibilité d'utiliser les poids de [MUSICNN](https://github.com/jordipons/musicnn) comme warm start, `MSD_musicnn_big` par exemple) à prédire les facteurs latents des chansons du Million Song Dataset en minimisant la MSE (les mel-spectrogram seraient obtenus grâce à 7digital.com, les facteurs latents 50D grâce à une WMF avec les données d'usage (play count) du MSD, et de Last.fm). Le FCNN sera de profondeur >= 5 et les convolutions 1D-vertical + 1D-horizontal, ou 3x3 selon la puissance de la machine d'entrainement, s'il est entraîné from scratch.
 
 2. Utilisation du FCNN dans le modèle de reco proposé pour créer les embeddings et minimiser la MSE sur le dataset Groover. Possibilité de fine-tuner les poids du FCNN au moment de l'entraînement avec la donnée Groover.
 
